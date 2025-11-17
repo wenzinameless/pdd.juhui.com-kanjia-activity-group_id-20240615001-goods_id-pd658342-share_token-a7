@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #c2185b;
+        }
+        
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+            min-width: 200px;
+        }
+        
+        .popup-content {
+            font-size: 18px;
+            font-family: '楷体', 'STKaiti', serif;
+            margin: 15px 0;
+            padding: 15px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .close-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LOVE</h1>
+        <button class="btn" onclick="batchPopup()">Create</button>
+    </div>
+
+    <script>
+       const tips = [
+    "我想你了", "今天过得开心嘛", "期待见面呦", "顺顺利利", 
+    "一起看电影叭", "吃好吃哒", "要想我", "生日快乐！", 
+    "我爱你", "亲亲你", "嘻嘻嘻嘻", "美滋滋", "午安玛卡巴卡", 
+    "有不会焯的可以问我", "晚安小鼻嘎"
+];
+
+const bgColors = [
+    "lightpink", "lightskyblue", "salmon", "lavender", 
+    "lightyellow", "plum", "peachpuff", "bisque", 
+    "lavenderblush", "lightcyan", "lightgreen", "lightcoral",
+    "lightseagreen", "lightsteelblue", "wheat"
+];
+        
+        function showWarmTip() {
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.style.backgroundColor = bgColor;
+            
+            const content = document.createElement('div');
+            content.className = 'popup-content';
+            content.textContent = tip;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-btn';
+            closeBtn.textContent = '关闭';
+            closeBtn.onclick = function() {
+                document.body.removeChild(overlay);
+                document.body.removeChild(popup);
+            };
+            
+            popup.appendChild(content);
+            popup.appendChild(closeBtn);
+            
+            // 随机位置，但确保在可视区域内
+            const maxLeft = window.innerWidth - 300;
+            const maxTop = window.innerHeight - 200;
+            const left = Math.random() * Math.max(0, maxLeft);
+            const top = Math.random() * Math.max(0, maxTop);
+            
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+            popup.style.transform = 'none';
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(popup);
+        }
+        
+        function batchPopup() {
+            for (let i = 0; i < 122; i++) {
+                setTimeout(() => {
+                    showWarmTip();
+                }, i * 30);
+            }
+        }
+        
+        // 点击 overlay 也可以关闭弹窗
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('overlay')) {
+                const overlay = e.target;
+                const popup = overlay.nextElementSibling;
+                
+                if (popup && popup.classList.contains('popup')) {
+                    document.body.removeChild(overlay);
+                    document.body.removeChild(popup);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
